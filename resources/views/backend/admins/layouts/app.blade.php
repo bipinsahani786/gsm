@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $title ?? 'DSP Admin' }}</title>
+    <title>{{ $title ?? 'SP Admin' }}</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -31,7 +31,7 @@
 
             <div class="h-20 flex items-center justify-between px-8 border-b border-slate-800/50">
                 <span class="text-2xl font-black italic tracking-tighter text-white">
-                    DSP<span class="text-red-500">.</span>
+                    SP<span class="text-red-500">.</span>
                 </span>
                 <button @click="sidebarOpen = false" class="lg:hidden text-slate-400 hover:text-white">
                     <i data-lucide="x" class="w-6 h-6"></i>
@@ -61,6 +61,11 @@
                     class="flex items-center gap-3 px-6 py-3.5 rounded-2xl transition-all {{ request()->is('admin/levels') ? 'bg-red-600 text-white font-bold shadow-lg shadow-red-600/20' : 'text-slate-400 hover:text-white hover:bg-slate-800/50 font-medium' }}">
                     <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
                     Level
+                </a>
+                <a href="{{ route('admin.rewards.index') }}"
+                    class="flex items-center gap-3 px-6 py-3.5 rounded-2xl transition-all {{ request()->is('admin/upgrade-rewards*') ? 'bg-red-600 text-white font-bold shadow-lg shadow-red-600/20' : 'text-slate-400 hover:text-white hover:bg-slate-800/50 font-medium' }}">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    Reward
                 </a>
                 <a href="{{ route('admin.positions.index') }}"
                     class="flex items-center gap-3 px-6 py-3.5 rounded-2xl transition-all {{ request()->is('admin/positions') ? 'bg-red-600 text-white font-bold shadow-lg shadow-red-600/20' : 'text-slate-400 hover:text-white hover:bg-slate-800/50 font-medium' }}">
@@ -131,7 +136,7 @@
                         
                         <div class="px-6 py-4 border-b border-slate-50 mb-2">
                             <p class="text-xs font-black text-slate-900">Account</p>
-                            <p class="text-[10px] text-slate-400 truncate">{{ Auth::user()->email ?? 'admin@DSP.com' }}</p>
+                            <p class="text-[10px] text-slate-400 truncate">{{ Auth::user()->email ?? 'admin@SP.com' }}</p>
                         </div>
 
                         <a href="/admin/settings" class="flex items-center gap-3 px-6 py-3 text-sm font-bold text-slate-600 hover:text-red-600 hover:bg-red-50 transition-all">

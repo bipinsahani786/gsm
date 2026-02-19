@@ -4,7 +4,7 @@
 <div class="space-y-8">
     <div>
         <h1 class="text-2xl font-black text-slate-900 tracking-tight">Analytics Dashboard</h1>
-        <p class="text-slate-500 text-sm italic">Showing real-time data for DSP platform.</p>
+        <p class="text-slate-500 text-sm italic">Showing real-time data for SP platform.</p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

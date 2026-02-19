@@ -77,4 +77,16 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Level::class, 'level_id');
     }
+
+  
+    public function sponsor()
+    {
+        return $this->belongsTo(User::class, 'rid', 'uid');
+    }
+
+    
+    public function downlines()
+    {
+        return $this->hasMany(User::class, 'rid', 'uid');
+    }
 }

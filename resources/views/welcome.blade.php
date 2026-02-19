@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DSP | Next-Gen Earning Platform</title>
+    <title>SP | Next-Gen Earning Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -33,7 +33,7 @@
     <nav class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-lg border-b border-slate-100 transition-all duration-300" x-data="{ mobileMenu: false }">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
             <a href="#" class="text-2xl font-black italic tracking-tighter text-slate-900">
-                DSP<span class="text-red-600">.</span>
+                SP<span class="text-red-600">.</span>
             </a>
             
             <div class="hidden lg:flex items-center space-x-8 text-sm font-bold text-slate-600">
@@ -76,7 +76,7 @@
                     Unlock Your <br><span class="text-gradient">Financial Future</span>
                 </h1>
                 <p class="text-slate-400 text-lg max-w-lg mx-auto lg:mx-0 leading-relaxed">
-                    DSP is the world's leading decentralized earning platform. Complete tasks, refer friends, and withdraw daily directly to your UPI or Crypto wallet.
+                    SP is the world's leading decentralized earning platform. Complete tasks, refer friends, and withdraw daily directly to your UPI or Crypto wallet.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                     <a href="{{ route('register') }}" class="bg-red-600 text-white font-bold py-4 px-10 rounded-2xl shadow-xl shadow-red-600/20 hover:-translate-y-1 transition-transform">
@@ -148,7 +148,7 @@
                 <span class="text-red-600 font-bold text-sm uppercase tracking-widest">Who We Are</span>
                 <h2 class="text-4xl font-black text-slate-900 leading-tight">We help you generate <br>Passive Income.</h2>
                 <p class="text-slate-500 leading-relaxed">
-                    DSP is built on the core principle of financial transparency. We connect businesses who need tasks done with users who want to earn. It's a simple ecosystem where everyone wins.
+                    SP is built on the core principle of financial transparency. We connect businesses who need tasks done with users who want to earn. It's a simple ecosystem where everyone wins.
                 </p>
                 <ul class="space-y-4 pt-4">
                     <li class="flex items-center gap-4">
@@ -171,7 +171,7 @@
     <section id="features" class="py-24 px-6 bg-slate-50">
         <div class="max-w-7xl mx-auto text-center mb-16">
             <span class="text-red-600 font-bold text-sm uppercase tracking-widest">Our Features</span>
-            <h2 class="text-4xl font-black text-slate-900 mt-2">Why DSP is #1 Choice</h2>
+            <h2 class="text-4xl font-black text-slate-900 mt-2">Why SP is #1 Choice</h2>
         </div>
         
         <div class="max-w-7xl mx-auto grid md:grid-cols-3 gap-8">
@@ -235,7 +235,7 @@
             <div class="space-y-8">
                 <span class="bg-red-600 text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest">Mobile First</span>
                 <h2 class="text-5xl font-black text-white leading-tight">
-                    Download the <br><span class="text-red-500">Official DSP App</span>
+                    Download the <br><span class="text-red-500">Official SP App</span>
                 </h2>
                 <p class="text-slate-400 text-lg leading-relaxed">
                     Access your dashboard anytime, anywhere. Get real-time notifications for payouts and new tasks. Available for Android and iOS.
@@ -349,7 +349,7 @@
             </div>
             <div class="glass-card p-8 rounded-[2rem] border border-slate-100">
                 <div class="text-yellow-400 text-lg mb-4"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half"></i></div>
-                <p class="text-slate-600 italic mb-6">"Very easy to use interface. I recommend everyone to join DSP Digital Platform."</p>
+                <p class="text-slate-600 italic mb-6">"Very easy to use interface. I recommend everyone to join SP Digital Platform."</p>
                 <div class="flex items-center gap-4">
                     <img src="https://randomuser.me/api/portraits/men/86.jpg" class="w-10 h-10 rounded-full">
                     <span class="font-bold text-slate-900">Rohan Das</span>
@@ -394,7 +394,7 @@
         <div class="max-w-6xl mx-auto bg-gradient-to-r from-red-600 to-red-500 rounded-[3rem] p-12 md:p-20 text-center text-white relative overflow-hidden shadow-2xl shadow-red-500/30">
             <div class="relative z-10">
                 <h2 class="text-4xl md:text-5xl font-black mb-6 tracking-tight">Don't Miss This Opportunity</h2>
-                <p class="text-red-100 mb-10 max-w-xl mx-auto text-lg">Join thousands of successful users who are earning daily with DSP. Secure your position now!</p>
+                <p class="text-red-100 mb-10 max-w-xl mx-auto text-lg">Join thousands of successful users who are earning daily with SP. Secure your position now!</p>
                 <div class="flex flex-col sm:flex-row justify-center gap-4">
                     <a href="{{ route('register') }}" class="bg-white text-red-600 font-black py-4 px-12 rounded-full shadow-xl hover:scale-105 transition-transform">
                         Create Free Account
@@ -413,10 +413,10 @@
         <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-12 mb-16">
             <div class="col-span-1 md:col-span-2">
                 <div class="text-2xl font-black italic tracking-tighter mb-6">
-                    DSP<span class="text-red-500">.</span>
+                    SP<span class="text-red-500">.</span>
                 </div>
                 <p class="text-slate-400 max-w-sm leading-relaxed text-sm">
-                    DSP is a registered digital marketing and task management platform aimed at providing financial independence to youth.
+                    SP is a registered digital marketing and task management platform aimed at providing financial independence to youth.
                 </p>
                 <div class="flex gap-4 mt-6">
                     <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-red-600 transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
@@ -436,14 +436,14 @@
             <div>
                 <h4 class="font-bold text-lg mb-6">Contact</h4>
                 <ul class="space-y-3 text-slate-400 text-sm">
-                    <li><i class="fa-solid fa-envelope mr-2"></i> support@dsp.com</li>
+                    <li><i class="fa-solid fa-envelope mr-2"></i> support@SP.com</li>
                     <li><i class="fa-solid fa-phone mr-2"></i> +91 98765 43210</li>
                     <li><i class="fa-solid fa-location-dot mr-2"></i> Patna, Bihar, India</li>
                 </ul>
             </div>
         </div>
         <div class="max-w-7xl mx-auto px-6 pt-8 border-t border-slate-800 text-center text-slate-500 text-xs">
-            <p>&copy; 2026 DSP Digital Platform. All rights reserved.</p>
+            <p>&copy; 2026 SP Digital Platform. All rights reserved.</p>
         </div>
     </footer>
 

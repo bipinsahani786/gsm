@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Register | DSP</title>
+    <title>Register | SP</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -11,7 +11,7 @@
 
     <div class="min-h-screen flex flex-col">
         <div class="p-10 text-center">
-            <h1 class="text-4xl font-black italic text-white tracking-tighter">DSP<span class="text-red-500">.</span></h1>
+            <h1 class="text-4xl font-black italic text-white tracking-tighter">SP<span class="text-red-500">.</span></h1>
             <p class="text-slate-400 text-xs mt-2 font-bold uppercase tracking-widest">Create New Account</p>
         </div>
 

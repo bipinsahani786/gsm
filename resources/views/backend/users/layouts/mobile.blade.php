@@ -22,7 +22,7 @@
             </div>
             <div>
                 <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Welcome back</p>
-                <p class="text-sm font-bold">{{ Auth::user()->name ?? 'DSP Developer' }}</p>
+                <p class="text-sm font-bold">{{ Auth::user()->name ?? 'SP Developer' }}</p>
             </div>
         </div>
         {{-- <button class="relative p-2 bg-slate-800 rounded-full">
@@ -38,7 +38,7 @@
     <nav class="fixed bottom-0 left-0 right-0 glass-nav border-t border-gray-100 z-[100] safe-area-bottom">
         <div class="flex justify-around items-center h-20 px-4">
             <x-mobile-nav-item href="/dashboard" label="Home" active="{{ request()->is('dashboard') }}" />
-            <x-mobile-nav-item href="/funds" label="Funds" active="{{ request()->is('funds') }}" icon="wallet" />
+            <x-mobile-nav-item href="/tasks" label="Tasks" active="{{ request()->is('tasks') }}" icon="clipboard-check" />
             
             <div class="-mt-10">
                 <button class="w-14 h-14 bg-red-600 rounded-2xl shadow-lg shadow-red-300 flex items-center justify-center text-white active:scale-90 transition-all">

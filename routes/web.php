@@ -6,12 +6,15 @@ use App\Http\Controllers\Backend\Admins\Dashboard\AdminConfigurationController;
 use App\Http\Controllers\Backend\Admins\Dashboard\AdminDepositController;
 use App\Http\Controllers\Backend\Admins\Dashboard\AdminLevelController;
 use App\Http\Controllers\Backend\Admins\Dashboard\AdminPositionController;
+use App\Http\Controllers\Backend\Admins\Dashboard\AdminRewardController;
 use App\Http\Controllers\Backend\Admins\Dashboard\AdminWithdrawalController;
 use App\Http\Controllers\Backend\Users\Auth\UserAuthController as UserAuth;
 use App\Http\Controllers\Backend\Users\Dashboard\UserAccountController;
 use App\Http\Controllers\Backend\Users\Dashboard\UserDashboardController;
 use App\Http\Controllers\Backend\Users\Dashboard\UserRechargeController;
 use App\Http\Controllers\Backend\Users\Dashboard\UserSettingController;
+use App\Http\Controllers\Backend\Users\Dashboard\UserTaskController;
+use App\Http\Controllers\Backend\Users\Dashboard\UserTeamController;
 use App\Http\Controllers\Backend\Users\Dashboard\UserWithdrawController;
 use Illuminate\Support\Facades\Route;
 
@@ -56,6 +59,13 @@ Route::middleware('auth:web')->group(function () {
     //transactions
     Route::get('/transactions', [UserSettingController::class, 'transactions'])->name('user.transactions');
 
+
+    // Daily Tasks
+    Route::get('/tasks', [UserTaskController::class, 'index'])->name('user.tasks');
+    Route::post('/tasks/submit', [UserTaskController::class, 'submit'])->name('user.tasks.submit');
+
+    // Team / Referral Page
+    Route::get('/team', [UserTeamController::class, 'index'])->name('user.team');
 
     // User Settings Routes
     Route::get('/settings/password', [UserSettingController::class, 'changePasswordIndex'])->name('user.password.index');
@@ -111,8 +121,12 @@ Route::prefix('admin')->group(function () {
         Route::post('/withdrawals/{id}/approve', [AdminWithdrawalController::class, 'approve'])->name('admin.withdrawals.approve');
         Route::post('/withdrawals/{id}/reject', [AdminWithdrawalController::class, 'reject'])->name('admin.withdrawals.reject');
 
-        //
 
+        // Promotional Upgrade Rewards
+        Route::get('/upgrade-rewards', [AdminRewardController::class, 'index'])->name('admin.rewards.index');
+        Route::post('/upgrade-rewards/store', [AdminRewardController::class, 'store'])->name('admin.rewards.store');
+        Route::get('/upgrade-rewards/delete/{id}', [AdminRewardController::class, 'destroy'])->name('admin.rewards.delete');
+        Route::get('/upgrade-rewards/status/{id}', [AdminRewardController::class, 'toggleStatus'])->name('admin.rewards.status');
     });
 
 });

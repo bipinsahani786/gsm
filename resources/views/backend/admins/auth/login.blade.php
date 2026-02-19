@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Portal | DSP Control</title>
+    <title>Admin Portal | SP Control</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body class="bg-slate-50 min-h-screen flex items-center justify-center p-6">
     <div class="max-w-md w-full">
         <div class="text-center mb-10">
-            <h1 class="text-3xl font-black italic tracking-tighter text-slate-900">DSP<span class="text-red-600">.</span>ADMIN</h1>
+            <h1 class="text-3xl font-black italic tracking-tighter text-slate-900">SP<span class="text-red-600">.</span>ADMIN</h1>
             <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">Management Console</p>
         </div>
 
@@ -21,7 +21,7 @@
                 @csrf
                 <div>
                     <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Administrator Email</label>
-                    <input type="email" name="email" required placeholder="admin@DSP.com" 
+                    <input type="email" name="email" required placeholder="admin@SP.com" 
                         class="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 px-6 text-sm focus:ring-2 focus:ring-slate-900/10 outline-none transition-all mt-1">
                 </div>
 
@@ -38,7 +38,7 @@
             </form>
         </div>
         
-        <p class="text-center mt-8 text-slate-400 text-[10px] font-bold uppercase tracking-widest italic">&copy; 2026 DSP Systems Core</p>
+        <p class="text-center mt-8 text-slate-400 text-[10px] font-bold uppercase tracking-widest italic">&copy; 2026 SP Systems Core</p>
     </div>
 </body>
 </html>
