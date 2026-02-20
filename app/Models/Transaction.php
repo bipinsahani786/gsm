@@ -9,4 +9,9 @@ class Transaction extends Model
     protected $table = 'transactions';
 
     protected $guarded = [];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

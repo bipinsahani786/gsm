@@ -7,7 +7,11 @@
         </div>
         <div>
             <h4 class="text-[11px] font-black text-slate-800 uppercase tracking-tight">{{ $member->name }}</h4>
-            <p class="text-[9px] font-bold text-slate-400 mt-0.5">{{ $member->created_at->format('d M Y') }}</p>
+            <p class="text-[9px] font-bold text-slate-400 mt-0.5">UID: {{ $member->uid }}</p>
+            
+            <p class="text-[10px] font-black text-blue-600 mt-1">
+                Income: ₹{{ number_format(optional($member->wallet)->income_wallet ?? 0, 2) }}
+            </p>
         </div>
     </div>
     

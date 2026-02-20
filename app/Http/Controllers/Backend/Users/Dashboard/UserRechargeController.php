@@ -22,7 +22,7 @@ class UserRechargeController extends Controller
         $usdt_rate = $config['usdt_rate'] ?? 92;
         $min_recharge = $config['min_recharge'] ?? 500;
 
-        // 3. JSON decode karein (Error se bachne ke liye)
+        // 3. JSON decode karein 
         $usdt_methods = isset($config['usdt_methods'])
             ? json_decode($config['usdt_methods'], true)
             : [];

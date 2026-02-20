@@ -16,6 +16,28 @@
         </div>
 
         <div class="flex-1 bg-white rounded-t-[3rem] p-8 shadow-2xl">
+
+          @if(session('success'))
+                <div class="bg-emerald-50 border border-emerald-100 text-emerald-600 text-[11px] uppercase tracking-wider font-black p-4 rounded-2xl text-center mb-6 shadow-sm">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div class="bg-red-50 border border-red-100 text-red-600 text-[11px] uppercase tracking-wider font-black p-4 rounded-2xl text-center mb-6 shadow-sm">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="bg-red-50 border border-red-100 text-red-600 text-[11px] font-bold p-4 rounded-2xl mb-6 shadow-sm">
+                    <ul class="list-disc list-inside space-y-1">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif  
             <form action="{{ route('register') }}" method="POST" class="space-y-5">
                 @csrf
                 

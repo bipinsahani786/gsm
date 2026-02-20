@@ -1,28 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>{{ $title ?? 'MLM Pro' }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
-        ::-webkit-scrollbar { width: 0px; background: transparent; }
-        .safe-area-bottom { padding-bottom: env(safe-area-inset-bottom); }
-        .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+        .safe-area-bottom {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
     </style>
 </head>
+
 <body class="bg-[#F8F9FA] text-slate-900 antialiased selection:bg-red-100">
 
     <div class="sticky top-0 z-50 bg-slate-900 text-white px-5 py-4 flex items-center justify-between shadow-lg">
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-full border-2 border-red-500 overflow-hidden">
-                <img src="https://ui-avatars.com/api/?name={{ Auth::user()->name ?? 'User' }}&background=1e293b&color=ef4444" alt="user">
+                <img src="https://ui-avatars.com/api/?name={{ Auth::user()->name ?? 'User' }}&background=1e293b&color=ef4444"
+                    alt="user">
             </div>
             <div>
                 <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Welcome back</p>
                 <p class="text-sm font-bold">{{ Auth::user()->name ?? 'SP Developer' }}</p>
+                <p class="text-xs text-slate-400">UID:{{ Auth::user()->uid ?? 'UID' }}</p>
+
             </div>
         </div>
         {{-- <button class="relative p-2 bg-slate-800 rounded-full">
@@ -38,18 +59,24 @@
     <nav class="fixed bottom-0 left-0 right-0 glass-nav border-t border-gray-100 z-[100] safe-area-bottom">
         <div class="flex justify-around items-center h-20 px-4">
             <x-mobile-nav-item href="/dashboard" label="Home" active="{{ request()->is('dashboard') }}" />
-            <x-mobile-nav-item href="/tasks" label="Tasks" active="{{ request()->is('tasks') }}" icon="clipboard-check" />
-            
+            <x-mobile-nav-item href="/tasks" label="Tasks" active="{{ request()->is('tasks') }}"
+                icon="clipboard-check" />
+
             <div class="-mt-10">
-                <button class="w-14 h-14 bg-red-600 rounded-2xl shadow-lg shadow-red-300 flex items-center justify-center text-white active:scale-90 transition-all">
-                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                </button>
+                <a href="{{ route('user.guide') }}"
+                    class="w-14 h-14 bg-red-600 rounded-2xl shadow-lg shadow-red-300 flex items-center justify-center text-white active:scale-90 transition-all">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                        </path>
+                    </svg> </a>
             </div>
 
             <x-mobile-nav-item href="/team" label="Team" icon="users" />
-            <x-mobile-nav-item href="/profile" label="Profile"  active="{{ request()->is('profile') }}" icon="user" />
+            <x-mobile-nav-item href="/profile" label="Profile" active="{{ request()->is('profile') }}" icon="user" />
         </div>
     </nav>
 
 </body>
+
 </html>

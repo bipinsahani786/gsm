@@ -57,6 +57,49 @@
         </a>
     </div>
 
+    <section class="mt-8 px-5">
+        <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">Statistics Overview</h3>
+        
+        <div class="grid grid-cols-2 gap-3 mb-3">
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-center">
+                <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Today Earning</p>
+                <p class="text-[15px] font-black text-emerald-600 mt-1">₹{{ number_format($todayEarning, 2) }}</p>
+            </div>
+            
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-center">
+                <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Yesterday Earning</p>
+                <p class="text-[15px] font-black text-slate-700 mt-1">₹{{ number_format($yesterdayEarning, 2) }}</p>
+            </div>
+            
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-center">
+                <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">This Week</p>
+                <p class="text-[15px] font-black text-blue-600 mt-1">₹{{ number_format($thisWeekEarning, 2) }}</p>
+            </div>
+            
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-center">
+                <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">This Month</p>
+                <p class="text-[15px] font-black text-purple-600 mt-1">₹{{ number_format($thisMonthEarning, 2) }}</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2">
+            <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-100 text-center">
+                <p class="text-[8px] text-slate-400 font-bold uppercase tracking-widest leading-tight">Team Task</p>
+                <p class="text-xs font-black text-amber-500 mt-1.5">₹{{ number_format($teamTaskCommission, 2) }}</p>
+            </div>
+            
+            <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-100 text-center">
+                <p class="text-[8px] text-slate-400 font-bold uppercase tracking-widest leading-tight">Recommended</p>
+                <p class="text-xs font-black text-pink-500 mt-1.5">₹{{ number_format($recommendedIncome, 2) }}</p>
+            </div>
+            
+            <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-100 text-center">
+                <p class="text-[8px] text-slate-400 font-bold uppercase tracking-widest leading-tight">Total Revenue</p>
+                <p class="text-xs font-black text-slate-900 mt-1.5">₹{{ number_format($totalRevenue, 2) }}</p>
+            </div>
+        </div>
+    </section>
+
     <section class="mt-10 px-5 pb-10">
         <div class="mb-6 flex justify-between items-end">
             <div>

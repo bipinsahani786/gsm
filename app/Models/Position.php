@@ -12,7 +12,19 @@ class Position extends Model
         'salary',
         'team_condition',
         'required_members',
+        'required_level_id',
+        'required_directs',
         'icon',
         'status',
     ];
+
+    public function level()
+    {
+        return $this->belongsTo(Level::class, 'required_level_id');
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }

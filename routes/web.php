@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controllers\Backend\Admins\Auth\AdminAuthController as AdminAuth;
-
 use App\Http\Controllers\Backend\Admins\Dashboard\AdminConfigurationController;
+use App\Http\Controllers\Backend\Admins\Dashboard\AdminDashboardController;
 use App\Http\Controllers\Backend\Admins\Dashboard\AdminDepositController;
+use App\Http\Controllers\Backend\Admins\Dashboard\AdminGuideController;
 use App\Http\Controllers\Backend\Admins\Dashboard\AdminLevelController;
 use App\Http\Controllers\Backend\Admins\Dashboard\AdminPositionController;
 use App\Http\Controllers\Backend\Admins\Dashboard\AdminRewardController;
+use App\Http\Controllers\Backend\Admins\Dashboard\AdminUserController;
 use App\Http\Controllers\Backend\Admins\Dashboard\AdminWithdrawalController;
 use App\Http\Controllers\Backend\Users\Auth\UserAuthController as UserAuth;
 use App\Http\Controllers\Backend\Users\Dashboard\UserAccountController;
@@ -66,7 +68,8 @@ Route::middleware('auth:web')->group(function () {
 
     // Team / Referral Page
     Route::get('/team', [UserTeamController::class, 'index'])->name('user.team');
-
+    // Guide
+    Route::get('/guide', [UserDashboardController::class, 'guide'])->name('user.guide');
     // User Settings Routes
     Route::get('/settings/password', [UserSettingController::class, 'changePasswordIndex'])->name('user.password.index');
     Route::post('/settings/password', [UserSettingController::class, 'updatePassword'])->name('user.password.update');
@@ -87,12 +90,14 @@ Route::prefix('admin')->group(function () {
     });
 
     Route::middleware('auth:admin')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('backend.admins.pages.dashboard');
-        })->name('admin.dashboard');
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
         Route::post('/logout', [AdminAuth::class, 'logout'])->name('admin.logout');
 
+        // User Management
+        Route::get('/users', [AdminUserController::class, 'index'])->name('admin.users.index');
+        Route::get('/users/{id}/details', [AdminUserController::class, 'show'])->name('admin.users.show');
+        Route::get('/users/{id}/tree', [AdminUserController::class, 'tree'])->name('admin.users.tree');
 
         Route::get('/settings', [AdminConfigurationController::class, 'index'])->name('admin.settings');
         Route::post('/settings', [AdminConfigurationController::class, 'update'])->name('admin.config.update');
@@ -102,6 +107,17 @@ Route::prefix('admin')->group(function () {
         Route::post('/settings/withdrawals', [AdminConfigurationController::class, 'updateWithdrawalSettings'])
             ->name('admin.settings.withdrawal.update');
 
+
+        // Banners & Income Guides Management
+        Route::get('/guides', [AdminGuideController::class, 'index'])->name('admin.guides.index');
+
+        // Banner Actions
+        Route::post('/guides/banner', [AdminGuideController::class, 'storeBanner'])->name('admin.guides.banner.store');
+        Route::delete('/guides/banner/{id}', [AdminGuideController::class, 'destroyBanner'])->name('admin.guides.banner.destroy');
+
+        // Income Method Actions
+        Route::post('/guides/method', [AdminGuideController::class, 'storeMethod'])->name('admin.guides.method.store');
+        Route::delete('/guides/method/{id}', [AdminGuideController::class, 'destroyMethod'])->name('admin.guides.method.destroy');
         Route::get('/levels', [AdminLevelController::class, 'index'])->name('admin.levels.index');
         Route::post('/levels', [AdminLevelController::class, 'store'])->name('admin.levels.store');
         Route::delete('/levels/{id}', [AdminLevelController::class, 'destroy'])->name('admin.levels.destroy');

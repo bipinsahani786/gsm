@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Backend\Users\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Banner;
 use App\Models\Configuration;
+use App\Models\IncomeMethod;
 use App\Models\Level;
 use App\Models\Transaction;
 use App\Models\UpgradeReward;
@@ -28,12 +30,68 @@ class UserDashboardController extends Controller
         $totalAssets = $wallet ? ($wallet->personal_wallet + $wallet->income_wallet) : 0;
 
         // Fetching Active Levels from Database
-        $levels = Level::where('status', 1)->get();
+        $levels = \App\Models\Level::where('status', 1)->get();
 
-        // Assuming user table has `position_id` relation, otherwise default to "General Employee"
+        // Position Name
         $positionName = $user->position ? $user->position->name : 'No Position';
 
-        return view('backend.users.pages.dashboard', compact('user', 'wallet', 'totalAssets', 'levels', 'positionName'));
+        // ---------------------------------------------------------
+        // EARNING STATISTICS LOGIC
+        // ---------------------------------------------------------
+        // Ye array define karta hai ki kin transactions ko 'Income/Earning' manna hai
+        $earningTypes = [
+            'task_income',
+            'referral_commission',
+            'team_task_commission',
+            'monthly_salary',
+            'rank_bonus',
+            'promotional_bonus'
+        ];
+
+        $today = Carbon::today('Asia/Kolkata');
+        $yesterday = Carbon::yesterday('Asia/Kolkata');
+        $startOfWeek = Carbon::now('Asia/Kolkata')->startOfWeek();
+        $endOfWeek = Carbon::now('Asia/Kolkata')->endOfWeek();
+
+        // 1. Time-based Earnings
+        $todayEarning = Transaction::where('user_id', $user->id)
+            ->whereIn('type', $earningTypes)->whereDate('created_at', $today)->sum('amount');
+
+        $yesterdayEarning = Transaction::where('user_id', $user->id)
+            ->whereIn('type', $earningTypes)->whereDate('created_at', $yesterday)->sum('amount');
+
+        $thisWeekEarning = Transaction::where('user_id', $user->id)
+            ->whereIn('type', $earningTypes)->whereBetween('created_at', [$startOfWeek, $endOfWeek])->sum('amount');
+
+        $thisMonthEarning = Transaction::where('user_id', $user->id)
+            ->whereIn('type', $earningTypes)->whereMonth('created_at', $today->month)
+            ->whereYear('created_at', $today->year)->sum('amount');
+
+        // 2. Specific Income Types
+        $teamTaskCommission = Transaction::where('user_id', $user->id)
+            ->where('type', 'team_task_commission')->sum('amount');
+
+        $recommendedIncome = Transaction::where('user_id', $user->id)
+            ->where('type', 'referral_commission')->sum('amount');
+
+        // 3. Total Revenue (Lifetime)
+        $totalRevenue = Transaction::where('user_id', $user->id)
+            ->whereIn('type', $earningTypes)->sum('amount');
+
+        return view('backend.users.pages.dashboard', compact(
+            'user',
+            'wallet',
+            'totalAssets',
+            'levels',
+            'positionName',
+            'todayEarning',
+            'yesterdayEarning',
+            'thisWeekEarning',
+            'thisMonthEarning',
+            'teamTaskCommission',
+            'recommendedIncome',
+            'totalRevenue'
+        ));
     }
 
     public function joinLevel(Request $request, $id)
@@ -198,5 +256,16 @@ class UserDashboardController extends Controller
             DB::rollback();
             return back()->with('error', 'Transaction failed: ' . $e->getMessage());
         }
+    }
+
+
+    public function guide()
+    {
+       
+        $banners = Banner::where('status', 1)->latest()->get();
+        
+        $methods = IncomeMethod::where('status', 1)->latest()->get();
+        
+        return view('backend.users.pages.guide', compact('banners', 'methods'));
     }
 }
