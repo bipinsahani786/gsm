@@ -168,4 +168,59 @@
             @endforeach
         </div>
     </section>
+  @if(isset($activePopup) && $activePopup)
+    <div x-data="{ showPopup: false }" 
+         x-init="
+            if(!sessionStorage.getItem('popup_seen_{{ $activePopup->id }}')) {
+                setTimeout(() => { showPopup = true }, 500); 
+            }
+         "
+         x-show="showPopup" 
+         x-cloak
+         class="fixed inset-0 z-[9999] flex items-center justify-center p-5">
+        
+        <div x-show="showPopup" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             @click="showPopup = false; sessionStorage.setItem('popup_seen_{{ $activePopup->id }}', 'true')"
+             class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm"></div>
+
+        <div x-show="showPopup" 
+             x-transition:enter="transition ease-out duration-300 delay-100"
+             x-transition:enter-start="opacity-0 translate-y-8 scale-95"
+             x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+             x-transition:leave-end="opacity-0 translate-y-8 scale-95"
+             class="relative bg-white w-full max-w-sm rounded-[2rem] shadow-2xl z-10 flex flex-col max-h-[85vh] overflow-hidden">
+            
+            <button @click="showPopup = false; sessionStorage.setItem('popup_seen_{{ $activePopup->id }}', 'true')" 
+                    class="absolute top-4 right-4 w-8 h-8 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center backdrop-blur-md transition-all z-50 shadow-lg">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+
+            <div class="overflow-y-auto w-full relative rounded-[2rem]">
+                
+                <img src="{{ asset($activePopup->image) }}" class="w-full h-auto object-cover bg-slate-50 min-h-[200px]">
+
+                @if($activePopup->title)
+                <div class="p-6 text-center bg-white rounded-b-[2rem]">
+                    <h3 class="font-black text-slate-800 text-lg uppercase tracking-tight leading-tight">{{ $activePopup->title }}</h3>
+                    
+                    @if($activePopup->link)
+                    <a href="{{ $activePopup->link }}" class="mt-5 block w-full bg-amber-500 text-white py-4 rounded-xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-amber-200 active:scale-95 transition-all">
+                        View Details
+                    </a>
+                    @endif
+                </div>
+                @endif
+
+            </div>
+            </div>
+    </div>
+    @endif
 @endsection

@@ -6,6 +6,7 @@ use App\Http\Controllers\Backend\Admins\Dashboard\AdminDashboardController;
 use App\Http\Controllers\Backend\Admins\Dashboard\AdminDepositController;
 use App\Http\Controllers\Backend\Admins\Dashboard\AdminGuideController;
 use App\Http\Controllers\Backend\Admins\Dashboard\AdminLevelController;
+use App\Http\Controllers\Backend\Admins\Dashboard\AdminPopupController;
 use App\Http\Controllers\Backend\Admins\Dashboard\AdminPositionController;
 use App\Http\Controllers\Backend\Admins\Dashboard\AdminRewardController;
 use App\Http\Controllers\Backend\Admins\Dashboard\AdminUserController;
@@ -107,6 +108,10 @@ Route::prefix('admin')->group(function () {
         Route::post('/settings/withdrawals', [AdminConfigurationController::class, 'updateWithdrawalSettings'])
             ->name('admin.settings.withdrawal.update');
 
+        // Popup Settings
+        Route::get('/popups', [AdminPopupController::class, 'index'])->name('admin.popups.index');
+        Route::post('/popups', [AdminPopupController::class, 'store'])->name('admin.popups.store');
+        Route::delete('/popups/{id}', [AdminPopupController::class, 'destroy'])->name('admin.popups.destroy');
 
         // Banners & Income Guides Management
         Route::get('/guides', [AdminGuideController::class, 'index'])->name('admin.guides.index');

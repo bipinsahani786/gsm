@@ -1,0 +1,795 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "SP MLM Platform API",
+        "description": "API Documentation for Mobile App and Frontend",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000",
+            "description": "Main Server"
+        }
+    ],
+    "paths": {
+        "/api/user/account/bind": {
+            "get": {
+                "tags": [
+                    "User Account"
+                ],
+                "summary": "Get saved Bank and Crypto details",
+                "operationId": "74e1ccd5a2309c3032541db6f9ae3a90",
+                "responses": {
+                    "200": {
+                        "description": "Account details fetched successfully"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "User Account"
+                ],
+                "summary": "Bind or Update Bank/Crypto Account",
+                "operationId": "124f249eeb81a27c975cfb1b2b13a4c8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "type"
+                                ],
+                                "properties": {
+                                    "type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "bank",
+                                            "crypto"
+                                        ],
+                                        "example": "bank"
+                                    },
+                                    "bank_name": {
+                                        "type": "string",
+                                        "example": "State Bank of India (Only for Bank)"
+                                    },
+                                    "account_holder": {
+                                        "type": "string",
+                                        "example": "Bipin Sahani (Only for Bank)"
+                                    },
+                                    "account_number": {
+                                        "type": "string",
+                                        "example": "1234567890 (Only for Bank)"
+                                    },
+                                    "ifsc_code": {
+                                        "type": "string",
+                                        "example": "SBIN0001234 (Only for Bank)"
+                                    },
+                                    "network": {
+                                        "type": "string",
+                                        "example": "TRC20 (Only for Crypto)"
+                                    },
+                                    "wallet_address": {
+                                        "type": "string",
+                                        "example": "Txyz123abc... (Only for Crypto)"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Account updated successfully"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/user/register": {
+            "post": {
+                "tags": [
+                    "User Authentication"
+                ],
+                "summary": "Register a new user",
+                "operationId": "be89b85b0616556577ebccb0fe9f5ad3",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "mobile",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Bipin Sahani"
+                                    },
+                                    "mobile": {
+                                        "type": "string",
+                                        "example": "9876543210"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "secret123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "secret123"
+                                    },
+                                    "rid": {
+                                        "type": "string",
+                                        "example": "SP123456"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User registered successfully"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    }
+                }
+            }
+        },
+        "/api/user/login": {
+            "post": {
+                "tags": [
+                    "User Authentication"
+                ],
+                "summary": "Login to get access token",
+                "operationId": "4af7f504cb781537c1d3a823bc957e31",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "login_input",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "login_input": {
+                                        "type": "string",
+                                        "example": "9876543210"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "secret123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login successful"
+                    },
+                    "401": {
+                        "description": "Invalid credentials"
+                    },
+                    "403": {
+                        "description": "Account is blocked"
+                    }
+                }
+            }
+        },
+        "/api/user/profile": {
+            "get": {
+                "tags": [
+                    "User Authentication"
+                ],
+                "summary": "Get logged in user profile details",
+                "operationId": "54f7586f0f4778851d73823446817a0a",
+                "responses": {
+                    "200": {
+                        "description": "Profile fetched successfully"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/user/logout": {
+            "post": {
+                "tags": [
+                    "User Authentication"
+                ],
+                "summary": "Logout and invalidate token",
+                "operationId": "11166c57e2349b46882caa0a44ca5778",
+                "responses": {
+                    "200": {
+                        "description": "Logged out successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/user/dashboard": {
+            "get": {
+                "tags": [
+                    "User Dashboard"
+                ],
+                "summary": "Get User Dashboard Data",
+                "operationId": "a3d0e2e37804a1f69175261544162d56",
+                "responses": {
+                    "200": {
+                        "description": "Dashboard data fetched successfully"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/user/level/{id}/join": {
+            "post": {
+                "tags": [
+                    "User Dashboard"
+                ],
+                "summary": "Join or Upgrade a Level",
+                "operationId": "d60ab986953d18bba7a3e26a8ff041b5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the level to join",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully joined/upgraded"
+                    },
+                    "400": {
+                        "description": "Business logic error (Insufficient balance, etc.)"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/user/guide": {
+            "get": {
+                "tags": [
+                    "User Dashboard"
+                ],
+                "summary": "Get Banners and Income Methods",
+                "operationId": "3b868a4219fb6bb9d12eb8e04c72beee",
+                "responses": {
+                    "200": {
+                        "description": "Guide data fetched successfully"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/user/recharge/config": {
+            "get": {
+                "tags": [
+                    "User Recharge"
+                ],
+                "summary": "Get UPI/USDT details for recharge",
+                "operationId": "c09dd50d6fbf99e09c8278ff1e733cd7",
+                "responses": {
+                    "200": {
+                        "description": "Configuration fetched successfully"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/user/recharge": {
+            "post": {
+                "tags": [
+                    "User Recharge"
+                ],
+                "summary": "Submit a new recharge request",
+                "operationId": "9de80693c106b7570009f6f5a46e4533",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "amount",
+                                    "method",
+                                    "screenshot"
+                                ],
+                                "properties": {
+                                    "amount": {
+                                        "description": "Minimum amount usually 500",
+                                        "type": "number",
+                                        "example": 1000
+                                    },
+                                    "method": {
+                                        "type": "string",
+                                        "enum": [
+                                            "upi",
+                                            "usdt"
+                                        ],
+                                        "example": "upi"
+                                    },
+                                    "utr": {
+                                        "description": "Required if method is upi (12 digit UTR number)",
+                                        "type": "string",
+                                        "example": "123456789012"
+                                    },
+                                    "hash": {
+                                        "description": "Required if method is usdt (TxHash)",
+                                        "type": "string",
+                                        "example": "Txabcdef123456789"
+                                    },
+                                    "screenshot": {
+                                        "description": "Payment screenshot image file",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Recharge request submitted"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/user/recharge/history": {
+            "get": {
+                "tags": [
+                    "User Recharge"
+                ],
+                "summary": "Get user recharge history",
+                "operationId": "ed1d63486bb7308d9c9e35d3ae0f9418",
+                "responses": {
+                    "200": {
+                        "description": "History fetched successfully"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/user/settings/change-password": {
+            "post": {
+                "tags": [
+                    "User Settings"
+                ],
+                "summary": "Change Account Password",
+                "operationId": "ad6aa43779f5401cf3390a96216a0166",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "current_password",
+                                    "new_password",
+                                    "new_password_confirmation"
+                                ],
+                                "properties": {
+                                    "current_password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "oldsecret123"
+                                    },
+                                    "new_password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "newsecret123"
+                                    },
+                                    "new_password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "newsecret123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Password updated successfully"
+                    },
+                    "400": {
+                        "description": "Incorrect current password"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/user/settings/transactions": {
+            "get": {
+                "tags": [
+                    "User Settings"
+                ],
+                "summary": "Get User Transactions (Passbook)",
+                "operationId": "07d1ab7f389e6835fdf8b0d208ba63b8",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items per page (default: 20)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Transactions fetched successfully"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/user/tasks": {
+            "get": {
+                "tags": [
+                    "User Tasks"
+                ],
+                "summary": "Get Daily Task Status",
+                "operationId": "c2f95901d0cdf426ce7294eae59ac118",
+                "responses": {
+                    "200": {
+                        "description": "Task data fetched successfully"
+                    },
+                    "400": {
+                        "description": "No active level found"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/user/tasks/submit": {
+            "post": {
+                "tags": [
+                    "User Tasks"
+                ],
+                "summary": "Submit a task and earn",
+                "operationId": "b3ec2d5daa32d7ade72c1f3cdfd81147",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "rating"
+                                ],
+                                "properties": {
+                                    "rating": {
+                                        "description": "Star rating between 1 to 5",
+                                        "type": "integer",
+                                        "example": 5
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task completed successfully"
+                    },
+                    "400": {
+                        "description": "Limit reached or error"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/user/team": {
+            "get": {
+                "tags": [
+                    "User Team"
+                ],
+                "summary": "Get User's 3-Level Team Network",
+                "operationId": "d2448f40e67f709b6689e306224c9c60",
+                "responses": {
+                    "200": {
+                        "description": "Team network data fetched successfully"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/user/withdraw/config": {
+            "get": {
+                "tags": [
+                    "User Withdrawal"
+                ],
+                "summary": "Get limits and bound accounts",
+                "operationId": "e5ea9fe88c4ea2021d2b6e60cf561952",
+                "responses": {
+                    "200": {
+                        "description": "Withdrawal limits and accounts fetched"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/user/withdraw": {
+            "post": {
+                "tags": [
+                    "User Withdrawal"
+                ],
+                "summary": "Submit a Withdrawal Request",
+                "operationId": "72b7b510ef14f0be146c1d9459fca02e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "amount",
+                                    "wallet_type",
+                                    "method"
+                                ],
+                                "properties": {
+                                    "amount": {
+                                        "type": "number",
+                                        "example": 1000
+                                    },
+                                    "wallet_type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "personal",
+                                            "income"
+                                        ],
+                                        "example": "income"
+                                    },
+                                    "method": {
+                                        "type": "string",
+                                        "enum": [
+                                            "bank",
+                                            "crypto"
+                                        ],
+                                        "example": "bank"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Withdrawal request submitted successfully"
+                    },
+                    "400": {
+                        "description": "Business logic error (Limits, Balance etc.)"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/user/withdraw/history": {
+            "get": {
+                "tags": [
+                    "User Withdrawal"
+                ],
+                "summary": "Get withdrawal history",
+                "operationId": "c2556e3bf38b44fa6aa505eff20307e6",
+                "responses": {
+                    "200": {
+                        "description": "History fetched successfully"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "sanctum": {
+                "type": "http",
+                "description": "Login with Mobile and Password to get the authentication token",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "User Account",
+            "description": "User Account"
+        },
+        {
+            "name": "User Authentication",
+            "description": "User Authentication"
+        },
+        {
+            "name": "User Dashboard",
+            "description": "User Dashboard"
+        },
+        {
+            "name": "User Recharge",
+            "description": "User Recharge"
+        },
+        {
+            "name": "User Settings",
+            "description": "User Settings"
+        },
+        {
+            "name": "User Tasks",
+            "description": "User Tasks"
+        },
+        {
+            "name": "User Team",
+            "description": "User Team"
+        },
+        {
+            "name": "User Withdrawal",
+            "description": "User Withdrawal"
+        }
+    ]
+}

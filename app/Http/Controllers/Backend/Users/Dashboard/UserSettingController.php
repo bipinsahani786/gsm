@@ -3,26 +3,26 @@
 namespace App\Http\Controllers\Backend\Users\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Services\UserSettingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 class UserSettingController extends Controller
 {
-    /**
-     * Show Change Password Page
-     */
+    protected $settingService;
+
+    public function __construct(UserSettingService $settingService)
+    {
+        $this->settingService = $settingService;
+    }
+
     public function changePasswordIndex()
     {
         return view('backend.users.pages.change_password');
     }
 
-    /**
-     * Handle Password Update
-     */
     public function updatePassword(Request $request)
     {
-        // 1. Validation Logic
         $request->validate([
             'current_password' => 'required',
             'new_password' => 'required|min:8|confirmed',
@@ -31,25 +31,19 @@ class UserSettingController extends Controller
             'new_password.min' => 'The new password must be at least 8 characters.'
         ]);
 
-        $user = Auth::user();
+        $result = $this->settingService->updatePassword(Auth::user(), $request->all());
 
-        // 2. Check if current password is correct
-        if (!Hash::check($request->current_password, $user->password)) {
-            return back()->with('error', 'The current password you entered is incorrect.');
+        if (!$result['status']) {
+            return back()->with('error', $result['message']);
         }
 
-        // 3. Update to new password
-        $user->password = Hash::make($request->new_password);
-        $user->save();
-
-        return back()->with('success', 'Your password has been updated successfully!');
+        return back()->with('success', $result['message']);
     }
 
     public function transactions()
     {
-        $transactions = \App\Models\Transaction::where('user_id', auth()->id())
-            ->orderBy('created_at', 'desc')
-            ->paginate(20);
+        // Service se 20 per page ke hisab se transactions le aayenge
+        $transactions = $this->settingService->getTransactions(Auth::user(), 20);
 
         return view('backend.users.pages.transactions', compact('transactions'));
     }

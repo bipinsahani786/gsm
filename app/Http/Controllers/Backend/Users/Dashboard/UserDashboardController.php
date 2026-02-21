@@ -3,269 +3,50 @@
 namespace App\Http\Controllers\Backend\Users\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Models\Banner;
-use App\Models\Configuration;
-use App\Models\IncomeMethod;
-use App\Models\Level;
-use App\Models\Transaction;
-use App\Models\UpgradeReward;
-use Carbon\Carbon;
+use App\Services\UserDashboardService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class UserDashboardController extends Controller
 {
+    protected $dashboardService;
+
+    public function __construct(UserDashboardService $dashboardService)
+    {
+        $this->dashboardService = $dashboardService;
+    }
+
     public function profile()
     {
         return view('backend.users.pages.profile');
     }
 
+    // Dashboard Home
     public function index()
     {
-        $user = Auth::user();
-        $wallet = $user->wallet;
+        $data = $this->dashboardService->getDashboardData(Auth::user());
 
-        // Total Assets
-        $totalAssets = $wallet ? ($wallet->personal_wallet + $wallet->income_wallet) : 0;
-
-        // Fetching Active Levels from Database
-        $levels = \App\Models\Level::where('status', 1)->get();
-
-        // Position Name
-        $positionName = $user->position ? $user->position->name : 'No Position';
-
-        // ---------------------------------------------------------
-        // EARNING STATISTICS LOGIC
-        // ---------------------------------------------------------
-        // Ye array define karta hai ki kin transactions ko 'Income/Earning' manna hai
-        $earningTypes = [
-            'task_income',
-            'referral_commission',
-            'team_task_commission',
-            'monthly_salary',
-            'rank_bonus',
-            'promotional_bonus'
-        ];
-
-        $today = Carbon::today('Asia/Kolkata');
-        $yesterday = Carbon::yesterday('Asia/Kolkata');
-        $startOfWeek = Carbon::now('Asia/Kolkata')->startOfWeek();
-        $endOfWeek = Carbon::now('Asia/Kolkata')->endOfWeek();
-
-        // 1. Time-based Earnings
-        $todayEarning = Transaction::where('user_id', $user->id)
-            ->whereIn('type', $earningTypes)->whereDate('created_at', $today)->sum('amount');
-
-        $yesterdayEarning = Transaction::where('user_id', $user->id)
-            ->whereIn('type', $earningTypes)->whereDate('created_at', $yesterday)->sum('amount');
-
-        $thisWeekEarning = Transaction::where('user_id', $user->id)
-            ->whereIn('type', $earningTypes)->whereBetween('created_at', [$startOfWeek, $endOfWeek])->sum('amount');
-
-        $thisMonthEarning = Transaction::where('user_id', $user->id)
-            ->whereIn('type', $earningTypes)->whereMonth('created_at', $today->month)
-            ->whereYear('created_at', $today->year)->sum('amount');
-
-        // 2. Specific Income Types
-        $teamTaskCommission = Transaction::where('user_id', $user->id)
-            ->where('type', 'team_task_commission')->sum('amount');
-
-        $recommendedIncome = Transaction::where('user_id', $user->id)
-            ->where('type', 'referral_commission')->sum('amount');
-
-        // 3. Total Revenue (Lifetime)
-        $totalRevenue = Transaction::where('user_id', $user->id)
-            ->whereIn('type', $earningTypes)->sum('amount');
-
-        return view('backend.users.pages.dashboard', compact(
-            'user',
-            'wallet',
-            'totalAssets',
-            'levels',
-            'positionName',
-            'todayEarning',
-            'yesterdayEarning',
-            'thisWeekEarning',
-            'thisMonthEarning',
-            'teamTaskCommission',
-            'recommendedIncome',
-            'totalRevenue'
-        ));
+        return view('backend.users.pages.dashboard', $data);
     }
 
+    // Join / Upgrade Level
     public function joinLevel(Request $request, $id)
     {
-        $newLevel = Level::findOrFail($id);
-        $user = Auth::user();
-        $wallet = $user->wallet;
+        $result = $this->dashboardService->processLevelJoin(Auth::user(), $id);
 
-        // 1. Check if the user is already on the requested level
-        if ($user->level_id == $newLevel->id) {
-            return back()->with('error', 'You are already on this level!');
+        if (!$result['status']) {
+            return back()->with('error', $result['message']);
         }
 
-        $oldLevel = null;
-        $refundAmount = 0;
-
-        // 2. Process existing level (if user is upgrading/downgrading)
-        if ($user->level_id) {
-            $oldLevel = Level::find($user->level_id);
-            if ($oldLevel) {
-                // Prevent downgrading to a lower-priced level
-                if ($newLevel->min_deposit < $oldLevel->min_deposit) {
-                    return back()->with('error', 'You cannot downgrade to a lower level.');
-                }
-
-                // Set the refund amount based on the current level's price
-                $refundAmount = $oldLevel->min_deposit;
-            }
-        }
-
-        // 3. Balance Validation
-        // Effective balance includes current wallet balance + the refund from the old level
-        $effectiveBalance = $wallet->personal_wallet + $refundAmount;
-
-        if ($effectiveBalance < $newLevel->min_deposit) {
-            $shortage = $newLevel->min_deposit - $effectiveBalance;
-            return back()->with('error', 'Insufficient balance! Please recharge ₹' . number_format($shortage, 2) . ' more to upgrade.');
-        }
-
-        try {
-            DB::beginTransaction();
-
-            // 4. STEP 1: Refund the old level amount (if applicable)
-            if ($oldLevel && $refundAmount > 0) {
-                $wallet->increment('personal_wallet', $refundAmount);
-
-                // Log the refund transaction
-                Transaction::create([
-                    'user_id' => $user->id,
-                    'amount' => $refundAmount,
-                    'post_balance' => $wallet->personal_wallet + $wallet->income_wallet,
-                    'type' => 'plan_refund',
-                    'trx_id' => 'REF' . strtoupper(uniqid()),
-                    'details' => "Refund for previous level ({$oldLevel->name})"
-                ]);
-            }
-
-            // 5. STEP 2: Deduct the new level's full price
-            $wallet->decrement('personal_wallet', $newLevel->min_deposit);
-
-            // 6. Update User's Level
-            $user->level_id = $newLevel->id;
-            $user->save();
-
-            // 7. Log the purchase transaction
-            Transaction::create([
-                'user_id' => $user->id,
-                'amount' => $newLevel->min_deposit,
-                'post_balance' => $wallet->personal_wallet + $wallet->income_wallet,
-                'type' => 'plan_purchase',
-                'trx_id' => 'PLN' . strtoupper(uniqid()),
-                'details' => $oldLevel ? "Upgraded to {$newLevel->name} Level" : "Joined {$newLevel->name} Level"
-            ]);
-
-            // ========================================================
-            // LOGIC 1: PROMOTIONAL REWARDS (Time-bound Upgrade Bonus)
-            // ========================================================
-            $now = Carbon::now('Asia/Kolkata');
-            $promo = UpgradeReward::where('to_level_id', $newLevel->id)
-                ->where('from_level_id', $oldLevel ? $oldLevel->id : null)
-                ->where('status', 1)
-                ->where('start_date', '<=', $now)
-                ->where('end_date', '>=', $now)
-                ->first();
-
-            if ($promo) {
-                // Credit the bonus to the income wallet
-                $wallet->increment('income_wallet', $promo->reward_amount);
-
-                Transaction::create([
-                    'user_id' => $user->id,
-                    'amount' => $promo->reward_amount,
-                    'post_balance' => $wallet->personal_wallet + $wallet->income_wallet,
-                    'type' => 'promotional_bonus',
-                    'trx_id' => 'PRM' . strtoupper(uniqid()),
-                    'details' => "Limited Time Upgrade Bonus to {$newLevel->name}"
-                ]);
-            }
-
-            // ========================================================
-            // LOGIC 2: REFERRAL COMMISSION (One-Time Only + Sponsor Capping)
-            // ========================================================
-
-            // Referral commission is distributed ONLY on the FIRST purchase.
-            // If $oldLevel is null, it means the user has never purchased a plan before.
-            if (!$oldLevel && $user->rid) {
-
-                // Fetch commission percentages from global configuration
-                $percentages = [
-                    1 => Configuration::get('referral_l1', 10),
-                    2 => Configuration::get('referral_l2', 5),
-                    3 => Configuration::get('referral_l3', 2)
-                ];
-
-                $currentSponsor = $user->sponsor;
-                $levelCount = 1;
-
-                // Traverse up to 3 levels in the sponsor hierarchy
-                while ($currentSponsor && $levelCount <= 3) {
-
-                    // The sponsor's maximum earning capacity is capped by their own active level's price.
-                    $sponsorCap = $currentSponsor->level ? $currentSponsor->level->min_deposit : 0;
-
-                    if ($sponsorCap > 0) { // If sponsor is un-activated (0), they earn nothing
-
-                        // COMMISSION CALCULATION (Capping Logic)
-                        // The percentage is applied to the smaller value between the downline's deposit and the sponsor's cap.
-                        $commissionBaseAmount = min($sponsorCap, $newLevel->min_deposit);
-
-                        $commissionAmount = ($commissionBaseAmount * $percentages[$levelCount]) / 100;
-
-                        if ($commissionAmount > 0) {
-                            $sponsorWallet = $currentSponsor->wallet;
-                            $sponsorWallet->increment('income_wallet', $commissionAmount);
-
-                            Transaction::create([
-                                'user_id' => $currentSponsor->id,
-                                'amount' => $commissionAmount,
-                                'post_balance' => $sponsorWallet->personal_wallet + $sponsorWallet->income_wallet,
-                                'type' => 'referral_commission',
-                                'trx_id' => 'REF' . strtoupper(uniqid()),
-                                'details' => "Level {$levelCount} commission from {$user->name} joining {$newLevel->name}"
-                            ]);
-                        }
-                    }
-
-                    // Move to the next upline
-                    $currentSponsor = $currentSponsor->sponsor;
-                    $levelCount++;
-                }
-            }
-
-            DB::commit();
-
-            $successMsg = $oldLevel
-                ? "Congratulations! You have successfully upgraded to {$newLevel->name}."
-                : "Congratulations! You have successfully joined {$newLevel->name}.";
-
-            return back()->with('success', $successMsg);
-
-        } catch (\Exception $e) {
-            DB::rollback();
-            return back()->with('error', 'Transaction failed: ' . $e->getMessage());
-        }
+        return back()->with('success', $result['message']);
     }
 
-
+    // Guide / Income Methods Page
     public function guide()
     {
-       
-        $banners = Banner::where('status', 1)->latest()->get();
+
+        $data = $this->dashboardService->getGuideData();
         
-        $methods = IncomeMethod::where('status', 1)->latest()->get();
-        
-        return view('backend.users.pages.guide', compact('banners', 'methods'));
+        return view('backend.users.pages.guide', $data);
     }
 }

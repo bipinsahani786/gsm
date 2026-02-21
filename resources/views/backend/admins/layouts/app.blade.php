@@ -58,6 +58,13 @@
                     <i data-lucide="book-open" class="w-4 h-4"></i>
                     App Guides
                 </a>
+                <a href="{{ route('admin.popups.index') ?? '#' }}"
+                    class="flex items-center gap-3 px-6 py-3.5 rounded-2xl transition-all {{ request()->is('admin/popups*') ? 'bg-red-600 text-white font-bold shadow-lg shadow-red-600/20' : 'text-slate-400 hover:text-white hover:bg-slate-800/50 font-medium' }}">
+                    <i data-lucide="book-open" class="w-4 h-4"></i>
+                    App Popups
+                </a>
+
+
 
                 <a href="{{ route('admin.deposits.index') ?? '#' }}"
                     class="flex items-center gap-3 px-6 py-3.5 rounded-2xl transition-all {{ request()->is('admin/deposits*') ? 'bg-red-600 text-white font-bold shadow-lg shadow-red-600/20' : 'text-slate-400 hover:text-white hover:bg-slate-800/50 font-medium' }}">
